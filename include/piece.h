@@ -5,7 +5,7 @@ namespace chess {
     class Piece {
     public:
         //https://www.tutorialspoint.com/cplusplus/cpp_interfaces.htm
-        virtual void Move();
+        virtual bool Move();
 
         boolean CheckPossibleMove();
         boolean CheckSameColor();
