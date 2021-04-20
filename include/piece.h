@@ -7,13 +7,13 @@ namespace chess {
         //https://www.tutorialspoint.com/cplusplus/cpp_interfaces.htm
         virtual bool Move();
 
-        boolean CheckPossibleMove();
-        boolean CheckSameColor();
-        boolean CheckBoardBounds();
+        bool CheckPossibleMove();
+        bool CheckSameColor();
+        bool CheckBoardBounds();
 
     protected:
         int color_;
         int current_position_x_;
         int current_position_y_;
     };
-}
+}  // namespace chess

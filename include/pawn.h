@@ -6,4 +6,4 @@ namespace chess {
         bool Move();
         bool CheckEnPassant();
     };
-}
+}  // namespace chess

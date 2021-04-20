@@ -7,4 +7,4 @@ namespace chess {
     private:
         std::vector<std::vector<Piece>> board;
     };
-}
+}  // namespace chess
