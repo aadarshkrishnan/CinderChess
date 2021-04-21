@@ -1,15 +1,21 @@
 #pragma once
 
+#include "piece.h"
+#include "board.h"
+
 namespace chess {
     // Base class
     class Piece {
     public:
-        //https://www.tutorialspoint.com/cplusplus/cpp_interfaces.htm
-        virtual bool Move();
+        Piece(int color, int x_position, int y_position);
 
-        bool CheckPossibleMove();
-        bool CheckSameColor();
-        bool CheckBoardBounds();
+        //https://www.tutorialspoint.com/cplusplus/cpp_interfaces.htm
+        virtual bool Move(int new_x_position, int new_y_position, Board board) = 0;
+        virtual bool CheckPossibleMove(int new_x_position, int new_y_position, Board board) = 0;
+
+        bool CheckSameColor(int new_x_position, int new_y_position, Board board);
+
+        int getColor() const;
 
     protected:
         int color_;

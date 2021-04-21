@@ -57,7 +57,8 @@ list(APPEND SOURCE_FILES src/bishop.cc
         src/pawn.cc
         src/piece.cc
         src/queen.cc
-        src/rook.cc)
+        src/rook.cc
+        src/space.cc)
 
 list(APPEND TEST_FILES tests/piece_movements_test.cc)
 
