@@ -20,7 +20,7 @@ namespace chess {
         if (current_position_x_ == new_x_position) {
             int yIncrement = (new_y_position - current_position_y_) / (abs(new_y_position - current_position_y_));
             for (int i = current_position_y_ + yIncrement; i != new_y_position; i += yIncrement) {
-                if (typeid(board.getBoard()[new_x_position][i].getColor()) != typeid(Space())) {
+                if (board.getBoard()[new_x_position][i].getColor() != 2) {
                     return false;
                 }
             }
@@ -29,7 +29,7 @@ namespace chess {
 
             int xIncrement = (new_x_position - current_position_x_) / (abs(new_x_position - current_position_x_));
             for (int i = current_position_x_ + xIncrement; i != new_x_position; i += xIncrement) {
-                if (typeid(board.getBoard()[i][new_y_position].getColor()) != typeid(Space())) {
+                if (board.getBoard()[i][new_y_position].getColor() != 2) {
                     return false;
                 }
             }
