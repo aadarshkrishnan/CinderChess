@@ -18,6 +18,7 @@ namespace chess {
         int getColor() const;
 
     protected:
+        //0 is black piece 1 is white piece 2 is empty
         int color_;
         int current_position_x_;
         int current_position_y_;
