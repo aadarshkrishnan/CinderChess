@@ -2,10 +2,11 @@
 
 namespace chess {
 
-    Piece::Piece(int color, int x_position, int y_position) {
+    Piece::Piece(int color, int x_position, int y_position, std::string picture) {
         color_ = color;
         current_position_x_ = x_position;
         current_position_y_ = y_position;
+        picture_ = picture;
     }
 
     bool Piece::CheckSameColor(int new_x_position, int new_y_position, Board board) {
@@ -23,6 +24,10 @@ namespace chess {
 
     int Piece::getColor() const {
         return color_;
+    }
+
+    const std::string &Piece::getPicture() const {
+        return picture_;
     }
 
     Piece::~Piece() = default;

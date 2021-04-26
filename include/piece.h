@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "board.h"
 
 namespace chess {
@@ -7,7 +8,7 @@ namespace chess {
     // Base class
     class Piece {
     public:
-        Piece(int color, int x_position, int y_position);
+        Piece(int color, int x_position, int y_position, std::string picture);
         virtual ~Piece();
 
         //https://www.tutorialspoint.com/cplusplus/cpp_interfaces.htm
@@ -18,10 +19,13 @@ namespace chess {
 
         int getColor() const;
 
+        const std::string &getPicture() const;
+
     protected:
         //0 is black piece 1 is white piece 2 is empty
         int color_;
         int current_position_x_;
         int current_position_y_;
+        std::string picture_;
     };
 }  // namespace chess
