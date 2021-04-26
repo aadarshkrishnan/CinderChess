@@ -1,13 +1,14 @@
 #pragma once
 
-#include "piece.h"
 #include "board.h"
 
 namespace chess {
+    class Board;
     // Base class
     class Piece {
     public:
         Piece(int color, int x_position, int y_position);
+        virtual ~Piece();
 
         //https://www.tutorialspoint.com/cplusplus/cpp_interfaces.htm
         virtual bool Move(int new_x_position, int new_y_position, Board board) = 0;

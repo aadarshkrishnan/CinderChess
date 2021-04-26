@@ -3,6 +3,7 @@
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
+#include "board.h"
 
 namespace chess {
     class Game : public ci::app::App {
@@ -23,14 +24,8 @@ namespace chess {
          */
         void update() override;
 
-        /**
-         * The action taken when a certain key is pressed.
-         * up
-         * down
-         * space
-         * left
-         * right
-         * @param event a key movement
-         */
+    private:
+        Board game_board_;
+
     };
 }  // namespace chess
