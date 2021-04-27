@@ -17,7 +17,7 @@ namespace chess {
         return false;
     }
 
-    bool King::CheckCastle(int new_x_position, int new_y_position, Board board) {
+    bool King::CheckCastle(int new_x_position, int new_y_position, const Board& board) {
         if (current_position_x_ == 0 || current_position_x_ == 7) {
             if (current_position_y_ == 3 && abs(current_position_y_ - new_y_position) == 2) {
                 //Queenside castle have to check queenside back rank

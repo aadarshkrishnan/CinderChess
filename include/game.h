@@ -24,8 +24,12 @@ namespace chess {
          */
         void update() override;
 
+        void mouseDown(ci::app::MouseEvent event) override;
+
     private:
         Board game_board_;
+        int current_x = -1;
+        int current_y = -1;
 
     };
 }  // namespace chess

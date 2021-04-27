@@ -11,6 +11,6 @@ namespace chess {
         bool Move(int new_x_position, int new_y_position, Board board) override;
         bool CheckPossibleMove(int new_x_position, int new_y_position, Board board) override;
 
-        bool CheckCastle(int new_x_position, int new_y_position, Board board);
+        bool CheckCastle(int new_x_position, int new_y_position, const Board& board);
     };
 }  // namespace chess

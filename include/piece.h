@@ -21,6 +21,8 @@ namespace chess {
 
         const std::string &getPicture() const;
 
+        void SetPosition(int x, int y);
+
     protected:
         //0 is black piece 1 is white piece 2 is empty
         int color_;

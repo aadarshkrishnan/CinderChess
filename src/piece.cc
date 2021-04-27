@@ -30,6 +30,11 @@ namespace chess {
         return picture_;
     }
 
+    void Piece::SetPosition(int x, int y) {
+        current_position_x_ = x;
+        current_position_y_ = y;
+    }
+
     Piece::~Piece() = default;
 
 }
