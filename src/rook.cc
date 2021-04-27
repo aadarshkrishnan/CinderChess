@@ -3,7 +3,7 @@
 
 namespace chess {
 
-    bool Rook::Move(int new_x_position, int new_y_position, Board board) {
+    bool Rook::Move(int new_x_position, int new_y_position, const Board& board) {
         if (current_position_x_ != new_x_position || current_position_y_ != new_y_position) {
             return false;
         }
