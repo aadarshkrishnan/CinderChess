@@ -15,13 +15,10 @@ namespace chess {
         Game();
 
         /**
-         * The visual of the simulation.
+         * The visual of the game.
          */
         void draw() override;
 
-        /**
-         * Changing the object the visual uses for each frame.
-         */
         void update() override;
 
         void mouseDown(ci::app::MouseEvent event) override;

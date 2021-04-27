@@ -7,3 +7,11 @@ Week 1 Changes:
 - Created app class that updates (Only has method declarations now)
 - Created test files (currently empty)
 - Created working CMake designed similarly to ideal gas
+
+
+Week 2 Changes:
+
+- Added Cinder implementation by creating visual board with pieces
+- Added images for each piece
+- Allowed user interaction with pieces
+- Essentially created working game, but still lacking a move on your turn element, castling, and en passant

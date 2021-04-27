@@ -37,9 +37,7 @@ namespace chess {
         }
     }
 
-    void Game::update() {
-
-    }
+    void Game::update() {}
 
     void Game::mouseDown(ci::app::MouseEvent event) {
         vec2 position = event.getPos();
@@ -72,9 +70,6 @@ namespace chess {
                         current_y = -1;
                     }
                     std::cout << std::endl;
-//                    std::cout << row <<  " " << col << std::endl;
-//                    std::cout << current_x <<  " " << current_y << std::endl << std::endl;
-
                 }
             }
         }
