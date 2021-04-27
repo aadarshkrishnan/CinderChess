@@ -28,6 +28,7 @@ namespace chess {
 
     private:
         Board game_board_;
+        std::vector<std::string> notation_;
         int current_x = -1;
         int current_y = -1;
 

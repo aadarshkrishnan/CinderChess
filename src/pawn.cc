@@ -41,7 +41,6 @@ namespace chess {
                 }
             }
         }
-
         return false;
     }
 

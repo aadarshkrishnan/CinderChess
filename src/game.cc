@@ -59,13 +59,16 @@ namespace chess {
                             game_board_.getBoard()[current_x][current_y]->SetPosition(row, col);
                             game_board_.getBoard()[row][col]->SetPosition(current_x,current_y);
                             game_board_.SwitchPositions(current_x, current_y, row, col);
+                            notation_.push_back(game_board_.getBoard()[row][col]->getPicture() + std::to_string(row) + std::to_string(col));
                             current_x = -1;
                             current_y = -1;
                         //}
                     }
-
-                    std::cout << row <<  " " << col << std::endl;
-                    std::cout << current_x <<  " " << current_y << std::endl << std::endl;
+                    for (const std::string& x: notation_) {
+                        std::cout << x << " ";
+                    }
+//                    std::cout << row <<  " " << col << std::endl;
+//                    std::cout << current_x <<  " " << current_y << std::endl << std::endl;
 
                 }
             }
