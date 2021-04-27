@@ -3,7 +3,7 @@
 
 namespace chess {
 
-    bool King::CheckPossibleMove(int new_x_position, int new_y_position, Board board) {
+    bool King::CheckPossibleMove(int new_x_position, int new_y_position, const Board& board) {
         if (board.getBoard()[new_x_position][new_y_position]->getColor() != 2) {
             return false;
         }

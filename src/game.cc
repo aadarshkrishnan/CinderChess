@@ -58,7 +58,8 @@ namespace chess {
                         current_x = row;
                         current_y = col;
                     } else {
-                        if (game_board_.getBoard()[current_x][current_y]->Move(row, col, game_board_)) {
+                        if (game_board_.getBoard()[current_x][current_y]->Move(row, col, game_board_) &&
+                                game_board_.getBoard()[current_x][current_y]->CheckPossibleMove(row, col, game_board_)) {
                             game_board_.getBoard()[current_x][current_y]->SetPosition(row, col);
                             game_board_.getBoard()[row][col]->SetPosition(current_x,current_y);
                             game_board_.SwitchPositions(current_x, current_y, row, col);

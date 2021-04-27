@@ -15,7 +15,7 @@ namespace chess {
         return true;
     }
 
-    bool Queen::CheckPossibleMove(int new_x_position, int new_y_position, Board board) {
+    bool Queen::CheckPossibleMove(int new_x_position, int new_y_position, const Board& board) {
         // horizontal movement
         if (current_position_x_ == new_x_position) {
             int y_increment_rook = (new_y_position - current_position_y_) / (abs(new_y_position - current_position_y_));

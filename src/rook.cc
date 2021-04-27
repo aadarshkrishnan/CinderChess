@@ -10,7 +10,7 @@ namespace chess {
         return true;
     }
 
-    bool Rook::CheckPossibleMove(int new_x_position, int new_y_position, Board board) {
+    bool Rook::CheckPossibleMove(int new_x_position, int new_y_position, const Board& board) {
         if (current_position_x_ == new_x_position) {
             int y_increment = (new_y_position - current_position_y_) / (abs(new_y_position - current_position_y_));
             for (int i = current_position_y_ + y_increment; i != new_y_position; i += y_increment) {

@@ -10,7 +10,7 @@ namespace chess {
         return false;
     }
 
-    bool Bishop::CheckPossibleMove(int new_x_position, int new_y_position, Board board) {
+    bool Bishop::CheckPossibleMove(int new_x_position, int new_y_position, const Board& board) {
         int x_increment = (current_position_x_ - new_x_position) / (abs(current_position_x_ - new_x_position));
         int y_increment = (current_position_y_ - new_y_position) / (abs(current_position_y_ - new_y_position));
 

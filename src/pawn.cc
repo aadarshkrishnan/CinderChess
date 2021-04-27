@@ -17,7 +17,7 @@ namespace chess {
                 }
             }
             //pawn takes
-            if (abs(current_position_x_ - new_x_position) == -1 && (abs(new_y_position - current_position_y_)== 1)) {
+            if (current_position_x_ - new_x_position == -1 && (abs(new_y_position - current_position_y_)== 1)) {
                 if (board.getBoard()[new_x_position][new_y_position]->getColor() == 1) {
                     return true;
                 }
@@ -35,7 +35,7 @@ namespace chess {
                 }
             }
             //pawn takes
-            if (abs(current_position_x_ - new_x_position) == 1 && (abs(current_position_y_ - new_y_position) == 1)) {
+            if (current_position_x_ - new_x_position == 1 && (abs(current_position_y_ - new_y_position) == 1)) {
                 if (board.getBoard()[new_x_position][new_y_position]->getColor() == 0) {
                     return true;
                 }
@@ -44,7 +44,7 @@ namespace chess {
         return false;
     }
 
-    bool Pawn::CheckPossibleMove(int new_x_position, int new_y_position, Board board) {
+    bool Pawn::CheckPossibleMove(int new_x_position, int new_y_position, const Board& board) {
         return true;
     }
 }
