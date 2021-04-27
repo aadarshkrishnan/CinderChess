@@ -64,9 +64,16 @@ namespace chess {
     }
 
     void Board::SwitchPositions(int x1, int y1, int x2, int y2) {
-        auto temp = board_[x1][y1];
-        board_[x1][y1] = board_[x2][y2];
-        board_[x2][y2] = temp;
+        if (board_[x2][y2]->getColor() == 2) {
+            auto temp = board_[x1][y1];
+            board_[x1][y1] = board_[x2][y2];
+            board_[x2][y2] = temp;
+        } else if (board_[x1][y1] != board_[x2][y2]) {
+            delete board_[x2][y2];
+            board_[x2][y2] = board_[x1][y1];
+            //delete board_[x1][y1];
+            board_[x1][y1] = new Space(2, x1, y1, "");
+        }
     }
 
 }
