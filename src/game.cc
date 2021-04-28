@@ -50,12 +50,22 @@ namespace chess {
 
                 if (glm::distance(position, pixel_center) <= 0.5) {
                     if (current_x == -1) {
+                        // ignore if the first click is an empty tile
                         if (game_board_.getBoard()[row][col]->getColor() == 2) {
+                            break;
+                        }
+                        // if it's the first part of a move then white must play
+                        if (notation_.size() % 2 == 0 && game_board_.getBoard()[row][col]->getColor() != 1) {
+                            break;
+                        }
+                        // if it's the second part of a move then black must play
+                        if (notation_.size() % 2 == 1 && game_board_.getBoard()[row][col]->getColor() != 0) {
                             break;
                         }
                         current_x = row;
                         current_y = col;
                     } else {
+                        // all the checks required before a move
                         if (game_board_.getBoard()[current_x][current_y]->Move(row, col, game_board_) &&
                                 game_board_.getBoard()[current_x][current_y]->CheckPossibleMove(row, col, game_board_) &&
                                 game_board_.getBoard()[current_x][current_y]->CheckSameColor(row, col, game_board_)) {
