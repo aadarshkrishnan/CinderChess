@@ -6,16 +6,19 @@
 namespace chess {
 
     bool Queen::Move(int new_x_position, int new_y_position, const Board& board) {
+        // horizontal movement
         if (current_position_x_ == new_x_position) {
             if (current_position_y_ != new_y_position) {
                 return true;
             }
         }
+        // vertical movement
         if (current_position_y_ == new_y_position) {
             if (current_position_x_ != new_x_position) {
                 return true;
             }
         }
+        //diagonal movement
         if (abs(current_position_x_ - new_x_position) == abs(current_position_y_ - new_y_position)) {
             return true;
         }
@@ -23,46 +26,16 @@ namespace chess {
     }
 
     bool Queen::CheckPossibleMove(int new_x_position, int new_y_position, const Board& board) {
-        // horizontal movement
+        // pieces in between horizontal movement
         if (current_position_x_ == new_x_position) {
-//            if (current_position_y_ > new_y_position) {
-//                for (int i = new_y_position; i < current_position_y_ - 1; i++) {
-//                    if (board.getBoard()[new_x_position][i]->getColor() != 2) {
-//                        std::cout << "got here";
-//                        return false;
-//                    }
-//                }
-//            } else {
-//                for (int i = current_position_y_; i < new_y_position - 1; i++) {
-//                    if (board.getBoard()[new_x_position][i]->getColor() != 2) {
-//                        std::cout << "got here";
-//                        return false;
-//                    }
-//                }
-//            }
             int y_increment_rook = (new_y_position - current_position_y_) / (abs(new_y_position - current_position_y_));
             for (int i = current_position_y_ + y_increment_rook; i != new_y_position; i += y_increment_rook) {
                 if (board.getBoard()[new_x_position][i]->getColor() != 2) {
                     return false;
                 }
             }
-            //vertical movement
+            //pieces in between vertical movement
         } else if (current_position_y_ == new_y_position) {
-//            if (current_position_x_ > new_x_position) {
-//                for (int i = new_x_position; i < current_position_x_ - 1; i++) {
-//                    if (board.getBoard()[i][new_y_position]->getColor() != 2) {
-//                        std::cout << "got here";
-//                        return false;
-//                    }
-//                }
-//            } else {
-//                for (int i = current_position_x_; i < new_x_position - 1; i++) {
-//                    if (board.getBoard()[i][new_y_position]->getColor() != 2) {
-//                        std::cout << "got here";
-//                        return false;
-//                    }
-//                }
-//            }
             int x_increment_rook = (new_x_position - current_position_x_) / (abs(new_x_position - current_position_x_));
             for (int i = current_position_x_ + x_increment_rook; i != new_x_position; i += x_increment_rook) {
                 if (board.getBoard()[i][new_y_position]->getColor() != 2) {
@@ -70,7 +43,7 @@ namespace chess {
                 }
             }
         } else if (current_position_y_ != new_y_position && current_position_x_ != new_x_position){
-            //diagonal movement
+            //pieces in between a diagonal movement
             int x_increment_bishop = (current_position_x_ - new_x_position) / (abs(current_position_x_ - new_x_position));
             int y_increment_bishop = (current_position_y_ - new_y_position) / (abs(current_position_y_ - new_y_position));
 
