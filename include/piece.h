@@ -15,7 +15,7 @@ namespace chess {
         virtual bool Move(int new_x_position, int new_y_position, const Board& board) = 0;
         virtual bool CheckPossibleMove(int new_x_position, int new_y_position, const Board& board) = 0;
 
-        bool CheckSameColor(int new_x_position, int new_y_position, Board board);
+        bool CheckSameColor(int new_x_position, int new_y_position, const Board& board);
 
         int getColor() const;
 

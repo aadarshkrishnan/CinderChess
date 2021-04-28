@@ -9,7 +9,9 @@ namespace chess {
             // regular movement
             if (current_position_x_ == 1) {
                 if (new_x_position - current_position_x_ <= 2 && new_y_position - current_position_y_ == 0) {
-                    return true;
+                    if (board.getBoard()[current_position_x_ + 1][current_position_y_]->getColor() == 2) {
+                        return true;
+                    }
                 }
             } else {
                 if (new_x_position - current_position_x_ == 1 && new_y_position - current_position_y_ == 0) {
@@ -27,7 +29,9 @@ namespace chess {
             // regular movement
             if (current_position_x_ == 6) {
                 if (current_position_x_ - new_x_position <= 2 && new_y_position - current_position_y_ == 0) {
-                    return true;
+                    if (board.getBoard()[current_position_x_ - 1][current_position_y_]->getColor() == 2) {
+                        return true;
+                    }
                 }
             } else {
                 if (current_position_x_ - new_x_position == 1 && new_y_position - current_position_y_ == 0) {
