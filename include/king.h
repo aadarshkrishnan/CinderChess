@@ -5,12 +5,39 @@
 
 namespace chess {
 
+    /**
+     * Class for the King piece and it's movements
+     */
     class King : public Piece {
     public:
-        King (int color, int x_position, int y_position, std::string picture) : Piece(color, x_position, y_position, picture) {}
-        bool Move(int new_x_position, int new_y_position, const Board& board) override;
-        bool CheckPossibleMove(int new_x_position, int new_y_position, const Board& board) override;
+        /**
+         * King constructor.
+         * @param color the color of the piece
+         * @param x_position the x coordinate on the board the piece is currently on
+         * @param y_position the y coordinate on the board the piece is currently on
+         * @param picture the image that is shown on cinder
+         */
+        King(int color, int x_position, int y_position, std::string picture) : Piece(color, x_position, y_position,
+                                                                                     picture) {}
 
-        bool CheckCastle(int new_x_position, int new_y_position, const Board& board);
+        /**
+         * Decides if the destination is valid move for the piece.
+         * @param new_x_position the new x coordinate for the piece.
+         * @param new_y_position the new y coordinate for the piece.
+         * @param board the board to know surroundings of the piece
+         * @return whether the move is possible
+         */
+        bool Move(int new_x_position, int new_y_position, const Board &board) override;
+
+        /**
+         * Checks if the path to a certain square is valid
+         * @param new_x_position the new x coordinate for the piece.
+         * @param new_y_position the new y coordinate for the piece.
+         * @param board the board to know surroundings of the piece
+         * @return whether the path to the move is valid
+         */
+        bool CheckPossibleMove(int new_x_position, int new_y_position, const Board &board) override;
+
+        bool CheckCastle(int new_x_position, int new_y_position, const Board &board);
     };
 }  // namespace chess

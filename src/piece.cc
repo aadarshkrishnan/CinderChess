@@ -9,24 +9,24 @@ namespace chess {
         picture_ = picture;
     }
 
-    bool Piece::CheckSameColor(int new_x_position, int new_y_position, const Board& board) {
-        if (board.getBoard()[new_x_position][new_y_position]->getColor() == 2) {
+    bool Piece::CheckSameColor(int new_x_position, int new_y_position, const Board &board) const {
+        if (board.get_board()[new_x_position][new_y_position]->get_color() == 2) {
             return true;
-        } else if (board.getBoard()[new_x_position][new_y_position]->getColor() == 0 &&
-        board.getBoard()[current_position_x_][current_position_y_]->getColor() == 1) {
+        } else if (board.get_board()[new_x_position][new_y_position]->get_color() == 0 &&
+                   board.get_board()[current_position_x_][current_position_y_]->get_color() == 1) {
             return true;
-        } else if (board.getBoard()[new_x_position][new_y_position]->getColor() == 1 &&
-                   board.getBoard()[current_position_x_][current_position_y_]->getColor() == 0) {
+        } else if (board.get_board()[new_x_position][new_y_position]->get_color() == 1 &&
+                   board.get_board()[current_position_x_][current_position_y_]->get_color() == 0) {
             return true;
         }
         return false;
     }
 
-    int Piece::getColor() const {
+    int Piece::get_color() const {
         return color_;
     }
 
-    const std::string &Piece::getPicture() const {
+    const std::string &Piece::get_picture() const {
         return picture_;
     }
 

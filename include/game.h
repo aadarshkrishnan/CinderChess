@@ -6,6 +6,10 @@
 #include "board.h"
 
 namespace chess {
+
+    /**
+     * The game that is being run by the cinder application.
+     */
     class Game : public ci::app::App {
     public:
 
@@ -19,8 +23,10 @@ namespace chess {
          */
         void draw() override;
 
-        void update() override;
-
+        /**
+         * Takes place of mouse click and uses that data to edit the board.
+         * @param event mouse click
+         */
         void mouseDown(ci::app::MouseEvent event) override;
 
     private:

@@ -7,7 +7,7 @@ namespace chess {
 
     Game::Game() {
         ci::app::setWindowSize(750, 750);
-        game_board_.SetBoard();
+        game_board_.SetStartingPosition();
     }
 
     void Game::draw() {
@@ -21,13 +21,13 @@ namespace chess {
                 }
 
 
-                vec2 pixel_top_left = vec2(100, 100) + vec2(col * 70,row * 70);
+                vec2 pixel_top_left = vec2(100, 100) + vec2(col * 70, row * 70);
                 vec2 pixel_bottom_right = pixel_top_left + vec2(70, 70);
                 ci::Rectf pixel_bounding_box(pixel_top_left, pixel_bottom_right);
                 ci::gl::drawSolidRect(pixel_bounding_box);
 
                 ci::gl::color(ci::Color("black"));
-                ci::gl::drawString((game_board_.getBoard()[row][col]->getPicture()),
+                ci::gl::drawString((game_board_.get_board()[row][col]->get_picture()),
                                    vec2(115 + col * 70, 110 + row * 70),
                                    ci::Color("black"),
                                    ci::Font("Arial", 60));
@@ -37,11 +37,9 @@ namespace chess {
         }
     }
 
-    void Game::update() {}
-
     void Game::mouseDown(ci::app::MouseEvent event) {
         vec2 position = event.getPos();
-        position -= vec2(100,100);
+        position -= vec2(100, 100);
         position /= 70;
 
         for (size_t row = 0; row < 8; ++row) {
@@ -51,29 +49,30 @@ namespace chess {
                 if (glm::distance(position, pixel_center) <= 0.5) {
                     if (current_x == -1) {
                         // ignore if the first click is an empty tile
-                        if (game_board_.getBoard()[row][col]->getColor() == 2) {
+                        if (game_board_.get_board()[row][col]->get_color() == 2) {
                             break;
                         }
                         // if it's the first part of a move then white must play
-                        if (notation_.size() % 2 == 0 && game_board_.getBoard()[row][col]->getColor() != 1) {
+                        if (notation_.size() % 2 == 0 && game_board_.get_board()[row][col]->get_color() != 1) {
                             break;
                         }
                         // if it's the second part of a move then black must play
-                        if (notation_.size() % 2 == 1 && game_board_.getBoard()[row][col]->getColor() != 0) {
+                        if (notation_.size() % 2 == 1 && game_board_.get_board()[row][col]->get_color() != 0) {
                             break;
                         }
                         current_x = row;
                         current_y = col;
                     } else {
                         // all the checks required before a move
-                        if (game_board_.getBoard()[current_x][current_y]->Move(row, col, game_board_) &&
-                                game_board_.getBoard()[current_x][current_y]->CheckPossibleMove(row, col, game_board_) &&
-                                game_board_.getBoard()[current_x][current_y]->CheckSameColor(row, col, game_board_)) {
-                            game_board_.getBoard()[current_x][current_y]->SetPosition(row, col);
-                            game_board_.getBoard()[row][col]->SetPosition(current_x,current_y);
+                        if (game_board_.get_board()[current_x][current_y]->Move(row, col, game_board_) &&
+                            game_board_.get_board()[current_x][current_y]->CheckPossibleMove(row, col, game_board_) &&
+                            game_board_.get_board()[current_x][current_y]->CheckSameColor(row, col, game_board_)) {
+                            game_board_.get_board()[current_x][current_y]->SetPosition(row, col);
+                            game_board_.get_board()[row][col]->SetPosition(current_x, current_y);
                             game_board_.SwitchPositions(current_x, current_y, row, col);
-                            notation_.push_back(game_board_.getBoard()[row][col]->getPicture() + std::to_string(row) + std::to_string(col));
-                            for (const std::string& x: notation_) {
+                            notation_.push_back(game_board_.get_board()[row][col]->get_picture() + std::to_string(row) +
+                                                std::to_string(col));
+                            for (const std::string &x: notation_) {
                                 std::cout << x << " ";
                             }
                         }
