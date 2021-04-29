@@ -1,5 +1,8 @@
-#include <board.h>
+#include "board.h"
+#include "space.h"
+#include "rook.h"
 #include "game.h"
+#include "king.h"
 
 namespace chess {
 
@@ -63,10 +66,47 @@ namespace chess {
                         current_x = row;
                         current_y = col;
                     } else {
-                        // all the checks required before a move
+
+                        if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" && row == 7 &&
+                            col == 6) {
+                            HandleWhiteKingSideCastle();
+                            current_x = -1;
+                            current_y = -1;
+                            notation_.emplace_back("♔0-0");
+                            break;
+                        }
+
+                        if (game_board_.get_board()[current_x][current_y]->get_picture() == "♚" && row == 0 &&
+                            col == 6) {
+                            HandleBlackKingSideCastle();
+                            current_x = -1;
+                            current_y = -1;
+                            notation_.emplace_back("♚0-0");
+                            break;
+                        }
+
+                        if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" && row == 7 &&
+                            col == 2) {
+                            HandleWhiteQueenSideCastle();
+                            current_x = -1;
+                            current_y = -1;
+                            notation_.emplace_back("♔0-0");
+                            break;
+                        }
+
+                        if (game_board_.get_board()[current_x][current_y]->get_picture() == "♚" && row == 0 &&
+                            col == 2) {
+                            HandleBlackQueenSideCastle();
+                            current_x = -1;
+                            current_y = -1;
+                            notation_.emplace_back("♚0-0");
+                            break;
+                        }
+
                         if (game_board_.get_board()[current_x][current_y]->Move(row, col, game_board_) &&
-                            game_board_.get_board()[current_x][current_y]->CheckPossibleMove(row, col, game_board_) &&
-                            game_board_.get_board()[current_x][current_y]->CheckSameColor(row, col, game_board_)) {
+                                 game_board_.get_board()[current_x][current_y]->CheckPossibleMove(row, col,
+                                                                                                  game_board_) &&
+                                 game_board_.get_board()[current_x][current_y]->CheckSameColor(row, col, game_board_)) {
                             game_board_.get_board()[current_x][current_y]->SetPosition(row, col);
                             game_board_.get_board()[row][col]->SetPosition(current_x, current_y);
                             game_board_.SwitchPositions(current_x, current_y, row, col);
@@ -83,6 +123,54 @@ namespace chess {
                 }
             }
         }
+    }
+
+    void Game::HandleWhiteKingSideCastle() {
+
+        if (game_board_.get_board()[7][5]->get_color() == 2 && game_board_.get_board()[7][6]->get_color() == 2) {
+            if (game_board_.get_board()[7][7]->get_picture() == "♖") {
+                game_board_.get_board()[7][4]->SetPosition(7, 6);
+                game_board_.get_board()[7][7]->SetPosition(7, 5);
+                game_board_.SwitchPositions(7, 4, 7, 6);
+                game_board_.SwitchPositions(7, 7, 7, 5);
+            }
+        }
+    }
+
+    void Game::HandleBlackKingSideCastle() {
+        if (game_board_.get_board()[0][5]->get_color() == 2 && game_board_.get_board()[0][6]->get_color() == 2) {
+            if (game_board_.get_board()[0][7]->get_picture() == "♜") {
+                game_board_.get_board()[0][4]->SetPosition(0, 6);
+                game_board_.get_board()[0][7]->SetPosition(0, 5);
+                game_board_.SwitchPositions(0, 4, 0, 6);
+                game_board_.SwitchPositions(0, 7, 0, 5);
+            }
+        }
+    }
+
+    void Game::HandleWhiteQueenSideCastle() {
+        if (game_board_.get_board()[7][3]->get_color() == 2 && game_board_.get_board()[7][2]->get_color() == 2
+            && game_board_.get_board()[7][1]->get_color() == 2) {
+            if (game_board_.get_board()[7][0]->get_picture() == "♖") {
+                game_board_.get_board()[7][4]->SetPosition(7, 2);
+                game_board_.get_board()[7][0]->SetPosition(7, 3);
+                game_board_.SwitchPositions(7, 4, 7, 2);
+                game_board_.SwitchPositions(7, 0, 7, 3);
+            }
+        }
+    }
+
+    void Game::HandleBlackQueenSideCastle() {
+        if (game_board_.get_board()[0][3]->get_color() == 2 && game_board_.get_board()[0][2]->get_color() == 2
+            && game_board_.get_board()[0][1]->get_color() == 2) {
+            if (game_board_.get_board()[0][0]->get_picture() == "♜") {
+                game_board_.get_board()[0][4]->SetPosition(0, 2);
+                game_board_.get_board()[0][0]->SetPosition(0, 3);
+                game_board_.SwitchPositions(0, 4, 0, 2);
+                game_board_.SwitchPositions(0, 0, 0, 3);
+            }
+        }
+
     }
 }
 

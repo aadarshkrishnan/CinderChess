@@ -29,6 +29,15 @@ namespace chess {
          */
         void mouseDown(ci::app::MouseEvent event) override;
 
+        void HandleWhiteKingSideCastle();
+
+        void HandleBlackKingSideCastle();
+
+        void HandleWhiteQueenSideCastle();
+
+        void HandleBlackQueenSideCastle();
+
+
     private:
         Board game_board_;
         std::vector<std::string> notation_;
