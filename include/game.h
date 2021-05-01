@@ -41,6 +41,10 @@ namespace chess {
 
         bool CheckPreviousKingMove();
 
+        bool CheckKingCastleIntersection(int color, int opposing_color);
+
+        bool CheckQueenCastleIntersection(int color, int opposing_color);
+
     private:
         Board game_board_;
         std::vector<std::string> notation_;

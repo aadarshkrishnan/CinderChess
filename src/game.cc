@@ -66,7 +66,7 @@ namespace chess {
                     } else {
 
                         if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" ||
-                                game_board_.get_board()[current_x][current_y]->get_picture() == "♚") {
+                            game_board_.get_board()[current_x][current_y]->get_picture() == "♚") {
                             if (current_y - col == 2 || col - current_y == 2) {
                                 if (CheckPreviousKingMove()) {
                                     current_x = -1;
@@ -82,9 +82,9 @@ namespace chess {
                         }
 
                         if (game_board_.get_board()[current_x][current_y]->Move(row, col, game_board_) &&
-                                 game_board_.get_board()[current_x][current_y]->CheckPossibleMove(row, col,
-                                                                                                  game_board_) &&
-                                 game_board_.get_board()[current_x][current_y]->CheckSameColor(row, col, game_board_)) {
+                            game_board_.get_board()[current_x][current_y]->CheckPossibleMove(row, col,
+                                                                                             game_board_) &&
+                            game_board_.get_board()[current_x][current_y]->CheckSameColor(row, col, game_board_)) {
                             game_board_.get_board()[current_x][current_y]->SetPosition(row, col);
                             game_board_.get_board()[row][col]->SetPosition(current_x, current_y);
                             game_board_.SwitchPositions(current_x, current_y, row, col);
@@ -157,26 +157,34 @@ namespace chess {
     void Game::HandleCastling(int row, int col) {
         if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" && row == 7 &&
             col == 6) {
-            HandleWhiteKingSideCastle();
-            notation_.emplace_back("♔0-0");
+            if (CheckKingCastleIntersection(7, 0)) {
+                HandleWhiteKingSideCastle();
+                notation_.emplace_back("♔0-0");
+            }
         } else if (game_board_.get_board()[current_x][current_y]->get_picture() == "♚" && row == 0 &&
-            col == 6) {
-            HandleBlackKingSideCastle();
-            notation_.emplace_back("♚0-0");
+                   col == 6) {
+            if (CheckKingCastleIntersection(0, 1)) {
+                HandleBlackKingSideCastle();
+                notation_.emplace_back("♚0-0");
+            }
         } else if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" && row == 7 &&
-            col == 2) {
-            HandleWhiteQueenSideCastle();
-            notation_.emplace_back("♔0-0");
+                   col == 2) {
+            if (CheckQueenCastleIntersection(7, 0)) {
+                HandleWhiteQueenSideCastle();
+                notation_.emplace_back("♔0-0");
+            }
         } else if (game_board_.get_board()[current_x][current_y]->get_picture() == "♚" && row == 0 &&
-            col == 2) {
-            HandleBlackQueenSideCastle();
-            notation_.emplace_back("♚0-0");
+                   col == 2) {
+            if (CheckQueenCastleIntersection(0, 1)) {
+                HandleBlackQueenSideCastle();
+                notation_.emplace_back("♚0-0");
+            }
         }
     }
 
     bool Game::CheckPreviousKingMove() {
         if (notation_.size() % 2 == 0) {
-            for (const std::string& move: notation_) {
+            for (const std::string &move: notation_) {
                 if (move.find("♔") < move.length()) {
                     return true;
                 }
@@ -184,7 +192,7 @@ namespace chess {
         }
 
         if (notation_.size() % 1 == 0) {
-            for (const std::string& move: notation_) {
+            for (const std::string &move: notation_) {
                 if (move.find("♚") < move.length()) {
                     return true;
                 }
@@ -192,5 +200,42 @@ namespace chess {
         }
         return false;
     }
+
+    bool Game::CheckQueenCastleIntersection(int color, int opposing_color) {
+        for (size_t x = 0; x < 8; ++x) {
+            for (size_t y = 0; y < 8; ++y) {
+                if (game_board_.get_board()[x][y]->get_color() == opposing_color) {
+                    if ((game_board_.get_board()[x][y]->Move(color, 3, game_board_) &&
+                         game_board_.get_board()[x][y]->CheckPossibleMove(color, 3, game_board_)) ||
+                        (game_board_.get_board()[x][y]->Move(color, 2, game_board_) &&
+                         game_board_.get_board()[x][y]->CheckPossibleMove(color, 2, game_board_)) ||
+                        (game_board_.get_board()[x][y]->Move(color, 1, game_board_) &&
+                         game_board_.get_board()[x][y]->CheckPossibleMove(color, 1, game_board_))) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+
+    bool Game::CheckKingCastleIntersection(int color, int opposing_color) {
+        for (size_t x = 0; x < 8; ++x) {
+            for (size_t y = 0; y < 8; ++y) {
+                if (game_board_.get_board()[x][y]->get_color() == opposing_color) {
+                    if ((game_board_.get_board()[x][y]->Move(color, 5, game_board_) &&
+                         game_board_.get_board()[x][y]->CheckPossibleMove(color, 5, game_board_)) ||
+                        (game_board_.get_board()[x][y]->Move(color, 6, game_board_) &&
+                         game_board_.get_board()[x][y]->CheckPossibleMove(color, 6, game_board_))) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+
 }
 

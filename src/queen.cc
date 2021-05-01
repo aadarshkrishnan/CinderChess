@@ -1,7 +1,4 @@
-#include <iostream>
 #include "queen.h"
-#include "space.h"
-
 
 namespace chess {
 
