@@ -36,6 +36,8 @@ namespace chess {
          */
         void SwitchPositions(int x1, int y1, int x2, int y2);
 
+        void Promote(int row, int col);
+
     private:
         std::vector<std::vector<Piece *>> board_;
     };

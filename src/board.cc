@@ -74,4 +74,14 @@ namespace chess {
             board_[x1][y1] = new Space(2, x1, y1, "");
         }
     }
+
+    void Board::Promote(int row, int col) {
+        if (board_[row][col]->get_color() == 0) {
+            delete board_[row][col];
+            board_[row][col] = new Queen(0, row, col, "♛");
+        } else {
+            delete board_[row][col];
+            board_[row][col] = new Queen(1, row, col, "♕");
+        }
+    }
 }

@@ -1,3 +1,4 @@
+#include <queen.h>
 #include "board.h"
 #include "game.h"
 
@@ -89,7 +90,9 @@ namespace chess {
                             game_board_.get_board()[row][col]->SetPosition(current_x, current_y);
                             game_board_.SwitchPositions(current_x, current_y, row, col);
 
-                            //check for promotion right here?
+                            if (CheckPawnPromotion(row,col)) {
+                                game_board_.Promote(row, col);
+                            }
 
                             notation_.push_back(game_board_.get_board()[row][col]->get_picture() + std::to_string(row) +
                                                 std::to_string(col));
@@ -236,6 +239,14 @@ namespace chess {
         return true;
     }
 
-
+    bool Game::CheckPawnPromotion(int row, int col) {
+        if (game_board_.get_board()[row][col]->get_picture() == "♟" ||
+            game_board_.get_board()[row][col]->get_picture() == "♙") {
+            if (row == 0 || row == 7) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
