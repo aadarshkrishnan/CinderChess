@@ -37,6 +37,9 @@ namespace chess {
 
         void HandleBlackQueenSideCastle();
 
+        void HandleCastling(int row, int col);
+
+        bool CheckPreviousKingMove();
 
     private:
         Board game_board_;

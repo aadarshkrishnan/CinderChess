@@ -37,7 +37,5 @@ namespace chess {
          * @return whether the path to the move is valid
          */
         bool CheckPossibleMove(int new_x_position, int new_y_position, const Board &board) override;
-
-        //bool CheckCastle(int new_x_position, int new_y_position, const Board &board);
     };
 }  // namespace chess

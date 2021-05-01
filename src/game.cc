@@ -1,8 +1,5 @@
 #include "board.h"
-#include "space.h"
-#include "rook.h"
 #include "game.h"
-#include "king.h"
 
 namespace chess {
 
@@ -41,6 +38,7 @@ namespace chess {
     }
 
     void Game::mouseDown(ci::app::MouseEvent event) {
+
         vec2 position = event.getPos();
         position -= vec2(100, 100);
         position /= 70;
@@ -67,40 +65,20 @@ namespace chess {
                         current_y = col;
                     } else {
 
-                        if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" && row == 7 &&
-                            col == 6) {
-                            HandleWhiteKingSideCastle();
-                            current_x = -1;
-                            current_y = -1;
-                            notation_.emplace_back("♔0-0");
-                            break;
-                        }
-
-                        if (game_board_.get_board()[current_x][current_y]->get_picture() == "♚" && row == 0 &&
-                            col == 6) {
-                            HandleBlackKingSideCastle();
-                            current_x = -1;
-                            current_y = -1;
-                            notation_.emplace_back("♚0-0");
-                            break;
-                        }
-
-                        if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" && row == 7 &&
-                            col == 2) {
-                            HandleWhiteQueenSideCastle();
-                            current_x = -1;
-                            current_y = -1;
-                            notation_.emplace_back("♔0-0");
-                            break;
-                        }
-
-                        if (game_board_.get_board()[current_x][current_y]->get_picture() == "♚" && row == 0 &&
-                            col == 2) {
-                            HandleBlackQueenSideCastle();
-                            current_x = -1;
-                            current_y = -1;
-                            notation_.emplace_back("♚0-0");
-                            break;
+                        if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" ||
+                                game_board_.get_board()[current_x][current_y]->get_picture() == "♚") {
+                            if (current_y - col == 2 || col - current_y == 2) {
+                                if (CheckPreviousKingMove()) {
+                                    current_x = -1;
+                                    current_y = -1;
+                                    break;
+                                } else {
+                                    HandleCastling(row, col);
+                                    current_x = -1;
+                                    current_y = -1;
+                                    break;
+                                }
+                            }
                         }
 
                         if (game_board_.get_board()[current_x][current_y]->Move(row, col, game_board_) &&
@@ -110,6 +88,9 @@ namespace chess {
                             game_board_.get_board()[current_x][current_y]->SetPosition(row, col);
                             game_board_.get_board()[row][col]->SetPosition(current_x, current_y);
                             game_board_.SwitchPositions(current_x, current_y, row, col);
+
+                            //check for promotion right here?
+
                             notation_.push_back(game_board_.get_board()[row][col]->get_picture() + std::to_string(row) +
                                                 std::to_string(col));
                             for (const std::string &x: notation_) {
@@ -171,6 +152,45 @@ namespace chess {
             }
         }
 
+    }
+
+    void Game::HandleCastling(int row, int col) {
+        if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" && row == 7 &&
+            col == 6) {
+            HandleWhiteKingSideCastle();
+            notation_.emplace_back("♔0-0");
+        } else if (game_board_.get_board()[current_x][current_y]->get_picture() == "♚" && row == 0 &&
+            col == 6) {
+            HandleBlackKingSideCastle();
+            notation_.emplace_back("♚0-0");
+        } else if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" && row == 7 &&
+            col == 2) {
+            HandleWhiteQueenSideCastle();
+            notation_.emplace_back("♔0-0");
+        } else if (game_board_.get_board()[current_x][current_y]->get_picture() == "♚" && row == 0 &&
+            col == 2) {
+            HandleBlackQueenSideCastle();
+            notation_.emplace_back("♚0-0");
+        }
+    }
+
+    bool Game::CheckPreviousKingMove() {
+        if (notation_.size() % 2 == 0) {
+            for (const std::string& move: notation_) {
+                if (move.find("♔") < move.length()) {
+                    return true;
+                }
+            }
+        }
+
+        if (notation_.size() % 1 == 0) {
+            for (const std::string& move: notation_) {
+                if (move.find("♚") < move.length()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
 
