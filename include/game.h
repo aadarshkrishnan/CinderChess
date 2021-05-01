@@ -29,22 +29,61 @@ namespace chess {
          */
         void mouseDown(ci::app::MouseEvent event) override;
 
+        /**
+         * Castles white on the king side.
+         */
         void HandleWhiteKingSideCastle();
 
+        /**
+         * Castles black on the king side.
+         */
         void HandleBlackKingSideCastle();
 
+        /**
+         * Castles white on the queen side.
+         */
         void HandleWhiteQueenSideCastle();
 
+        /**
+         * Castles black on the queen side.
+         */
         void HandleBlackQueenSideCastle();
 
+        /**
+         * Handles castling in general
+         * @param row the row of board
+         * @param col the column of board
+         */
         void HandleCastling(int row, int col);
 
+        /**
+         * Checks if the king had moved before, which would no longer allow it to castle.
+         * @return if the king had moved before
+         */
         bool CheckPreviousKingMove();
 
+        /**
+         * Checks if there is an opposing color piece in attacking in between the king side castle.
+         * @param color the row the castling is occurring on
+         * @param opposing_color the other color's color
+         * @return if there is an opposing color piece in attacking in between the king side castle
+         */
         bool CheckKingCastleIntersection(int color, int opposing_color);
 
+        /**
+         * Checks if there is an opposing color piece in attacking in between the queen side castle.
+         * @param color the row the castling is occurring on
+         * @param opposing_color the other color's color
+         * @return if there is an opposing color piece in attacking in between the queen side castle
+         */
         bool CheckQueenCastleIntersection(int color, int opposing_color);
 
+        /**
+         * Checks if a pawn is on the last rank.
+         * @param row the row of the board
+         * @param col the column of the board
+         * @return if there is a pawn that needs to be promoted
+         */
         bool CheckPawnPromotion(int row, int col);
 
     private:

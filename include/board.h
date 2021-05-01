@@ -36,6 +36,11 @@ namespace chess {
          */
         void SwitchPositions(int x1, int y1, int x2, int y2);
 
+        /**
+         * Promotes pawn into queen (auto-queen).
+         * @param row the row of board
+         * @param col the column of board
+         */
         void Promote(int row, int col);
 
     private:
