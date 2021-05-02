@@ -10,13 +10,13 @@ namespace chess {
     }
 
     bool Piece::CheckSameColor(int new_x_position, int new_y_position, const Board &board) const {
-        if (board.get_board()[new_x_position][new_y_position]->get_color() == 2) {
+        if (board.get_board()[new_x_position][new_y_position]->get_color() == Board::kEmptyPiece) {
             return true;
-        } else if (board.get_board()[new_x_position][new_y_position]->get_color() == 0 &&
-                   board.get_board()[current_position_x_][current_position_y_]->get_color() == 1) {
+        } else if (board.get_board()[new_x_position][new_y_position]->get_color() == Board::kBlackPiece &&
+                   board.get_board()[current_position_x_][current_position_y_]->get_color() == Board::kWhitePiece) {
             return true;
-        } else if (board.get_board()[new_x_position][new_y_position]->get_color() == 1 &&
-                   board.get_board()[current_position_x_][current_position_y_]->get_color() == 0) {
+        } else if (board.get_board()[new_x_position][new_y_position]->get_color() == Board::kWhitePiece &&
+                   board.get_board()[current_position_x_][current_position_y_]->get_color() == Board::kBlackPiece) {
             return true;
         }
         return false;

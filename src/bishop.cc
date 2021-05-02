@@ -18,9 +18,9 @@ namespace chess {
         int y_increment = (current_position_y_ - new_y_position) / (abs(current_position_y_ - new_y_position));
 
         //check every diagonal square to make sure it's empty
-        for (int i = 1; i < abs(new_x_position - current_position_x_); i++) {
-            if (board.get_board()[new_x_position + x_increment * i][new_y_position + y_increment * i]->get_color() !=
-                2) {
+        for (int position = 1; position < abs(new_x_position - current_position_x_); position++) {
+            if (board.get_board()[new_x_position + x_increment * position][new_y_position + y_increment * position]->get_color() !=
+                Board::kEmptyPiece) {
                 return false;
             }
         }

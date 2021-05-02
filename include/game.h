@@ -63,20 +63,20 @@ namespace chess {
         bool CheckPreviousKingMove();
 
         /**
-         * Checks if there is an opposing color piece in attacking in between the king side castle.
-         * @param color the row the castling is occurring on
-         * @param opposing_color the other color's color
-         * @return if there is an opposing color piece in attacking in between the king side castle
+         * Checks if there is an opposing back_row piece in attacking in between the king side castle.
+         * @param back_row the row the castling is occurring on
+         * @param opposing_color the other back_row's back_row
+         * @return if there is an opposing back_row piece in attacking in between the king side castle
          */
-        bool CheckKingCastleIntersection(int color, int opposing_color);
+        bool CheckKingCastleIntersection(int back_row, int opposing_color);
 
         /**
-         * Checks if there is an opposing color piece in attacking in between the queen side castle.
-         * @param color the row the castling is occurring on
-         * @param opposing_color the other color's color
-         * @return if there is an opposing color piece in attacking in between the queen side castle
+         * Checks if there is an opposing back_row piece in attacking in between the queen side castle.
+         * @param back_row the row the castling is occurring on
+         * @param opposing_color the other back_row's back_row
+         * @return if there is an opposing back_row piece in attacking in between the queen side castle
          */
-        bool CheckQueenCastleIntersection(int color, int opposing_color);
+        bool CheckQueenCastleIntersection(int back_row, int opposing_color);
 
         /**
          * Checks if a pawn is on the last rank.
@@ -99,10 +99,20 @@ namespace chess {
         bool CheckBlackKingInCheck();
 
     private:
+
+        const int kWindowSize = 750;
+        const int kStartingLeftCorner = 100;
+        const int kPieceCenterHorizontal = 115;
+        const int kPieceCenterVertical = 110;
+        const int kTileSize = 70;
+
+        const float kFontSize = 60;
+
+        const double kTileClickArea = 0.5;
+
         Board game_board_;
         std::vector<std::string> notation_;
         int current_x = -1;
         int current_y = -1;
-
     };
 }  // namespace chess

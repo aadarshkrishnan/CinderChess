@@ -26,16 +26,16 @@ namespace chess {
         // pieces in between horizontal movement
         if (current_position_x_ == new_x_position) {
             int y_increment_rook = (new_y_position - current_position_y_) / (abs(new_y_position - current_position_y_));
-            for (int i = current_position_y_ + y_increment_rook; i != new_y_position; i += y_increment_rook) {
-                if (board.get_board()[new_x_position][i]->get_color() != 2) {
+            for (int col = current_position_y_ + y_increment_rook; col != new_y_position; col += y_increment_rook) {
+                if (board.get_board()[new_x_position][col]->get_color() != Board::kEmptyPiece) {
                     return false;
                 }
             }
             //pieces in between vertical movement
         } else if (current_position_y_ == new_y_position) {
             int x_increment_rook = (new_x_position - current_position_x_) / (abs(new_x_position - current_position_x_));
-            for (int i = current_position_x_ + x_increment_rook; i != new_x_position; i += x_increment_rook) {
-                if (board.get_board()[i][new_y_position]->get_color() != 2) {
+            for (int row = current_position_x_ + x_increment_rook; row != new_x_position; row += x_increment_rook) {
+                if (board.get_board()[row][new_y_position]->get_color() != Board::kEmptyPiece) {
                     return false;
                 }
             }
@@ -46,10 +46,11 @@ namespace chess {
             int y_increment_bishop =
                     (current_position_y_ - new_y_position) / (abs(current_position_y_ - new_y_position));
 
-            for (int i = 1; i < abs(new_x_position - current_position_x_); i++) {
-                if (board.get_board()[new_x_position + x_increment_bishop * i][new_y_position +
-                                                                               y_increment_bishop * i]->get_color() !=
-                    2) {
+            for (int position = 1; position < abs(new_x_position - current_position_x_); position++) {
+                if (board.get_board()[new_x_position + x_increment_bishop * position][new_y_position +
+                                                                                      y_increment_bishop *
+                                                                                      position]->get_color() !=
+                    Board::kEmptyPiece) {
                     return false;
                 }
             }

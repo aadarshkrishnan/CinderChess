@@ -6,13 +6,13 @@ namespace chess {
     using glm::vec2;
 
     Game::Game() {
-        ci::app::setWindowSize(750, 750);
+        ci::app::setWindowSize(kWindowSize, kWindowSize);
         game_board_.SetStartingPosition();
     }
 
     void Game::draw() {
-        for (size_t row = 0; row < 8; ++row) {
-            for (size_t col = 0; col < 8; ++col) {
+        for (size_t row = 0; row < Board::kBoardSize; ++row) {
+            for (size_t col = 0; col < Board::kBoardSize; ++col) {
 
                 if ((row + col) % 2 == 0) {
                     ci::gl::color(ci::Color("white"));
@@ -20,16 +20,18 @@ namespace chess {
                     ci::gl::color(ci::Color("gray"));
                 }
 
-                vec2 pixel_top_left = vec2(100, 100) + vec2(col * 70, row * 70);
-                vec2 pixel_bottom_right = pixel_top_left + vec2(70, 70);
+                vec2 pixel_top_left =
+                        vec2(kStartingLeftCorner, kStartingLeftCorner) + vec2(col * kTileSize, row * kTileSize);
+                vec2 pixel_bottom_right = pixel_top_left + vec2(kTileSize, kTileSize);
                 ci::Rectf pixel_bounding_box(pixel_top_left, pixel_bottom_right);
                 ci::gl::drawSolidRect(pixel_bounding_box);
 
                 ci::gl::color(ci::Color("black"));
                 ci::gl::drawString((game_board_.get_board()[row][col]->get_picture()),
-                                   vec2(115 + col * 70, 110 + row * 70),
+                                   vec2(kPieceCenterHorizontal + col * kTileSize,
+                                        kPieceCenterVertical + row * kTileSize),
                                    ci::Color("black"),
-                                   ci::Font("Arial", 60));
+                                   ci::Font("Arial", kFontSize));
 
                 ci::gl::drawStrokedRect(pixel_bounding_box);
             }
@@ -39,25 +41,27 @@ namespace chess {
     void Game::mouseDown(ci::app::MouseEvent event) {
 
         vec2 position = event.getPos();
-        position -= vec2(100, 100);
-        position /= 70;
+        position -= vec2(kStartingLeftCorner, kStartingLeftCorner);
+        position /= kTileSize;
 
-        for (size_t row = 0; row < 8; ++row) {
-            for (size_t col = 0; col < 8; ++col) {
-                vec2 pixel_center = {col + 0.5, row + 0.5};
+        for (size_t row = 0; row < Board::kBoardSize; ++row) {
+            for (size_t col = 0; col < Board::kBoardSize; ++col) {
+                vec2 pixel_center = {col + kTileClickArea, row + kTileClickArea};
 
-                if (glm::distance(position, pixel_center) <= 0.5) {
+                if (glm::distance(position, pixel_center) <= kTileClickArea) {
                     if (current_x == -1) {
                         // ignore if the first click is an empty tile
-                        if (game_board_.get_board()[row][col]->get_color() == 2) {
+                        if (game_board_.get_board()[row][col]->get_color() == Board::kEmptyPiece) {
                             break;
                         }
                         // if it's the first part of a move then white must play
-                        if (notation_.size() % 2 == 0 && game_board_.get_board()[row][col]->get_color() != 1) {
+                        if (notation_.size() % 2 == 0 &&
+                            game_board_.get_board()[row][col]->get_color() != Board::kWhitePiece) {
                             break;
                         }
                         // if it's the second part of a move then black must play
-                        if (notation_.size() % 2 == 1 && game_board_.get_board()[row][col]->get_color() != 0) {
+                        if (notation_.size() % 2 == 1 &&
+                            game_board_.get_board()[row][col]->get_color() != Board::kBlackPiece) {
                             break;
                         }
                         current_x = row;
@@ -113,16 +117,12 @@ namespace chess {
                                 }
                             }
 
-                            if (CheckPawnPromotion(row,col)) {
+                            if (CheckPawnPromotion(row, col)) {
                                 game_board_.Promote(row, col);
                             }
 
                             notation_.push_back(game_board_.get_board()[row][col]->get_picture() + std::to_string(row) +
                                                 std::to_string(col));
-
-                            for (const std::string &x: notation_) {
-                                std::cout << x << " ";
-                            }
 
                         }
                         current_x = -1;
@@ -135,74 +135,100 @@ namespace chess {
     }
 
     void Game::HandleWhiteKingSideCastle() {
-        if (game_board_.get_board()[7][5]->get_color() == 2 && game_board_.get_board()[7][6]->get_color() == 2) {
-            if (game_board_.get_board()[7][7]->get_picture() == "♖") {
-                game_board_.get_board()[7][4]->SetPosition(7, 6);
-                game_board_.get_board()[7][7]->SetPosition(7, 5);
-                game_board_.SwitchPositions(7, 4, 7, 6);
-                game_board_.SwitchPositions(7, 7, 7, 5);
+        if (game_board_.get_board()[Board::kWhiteBackRow][Board::kFFileBishopColumn]->get_color() ==
+            Board::kEmptyPiece &&
+            game_board_.get_board()[Board::kWhiteBackRow][Board::kGFileKnightColumn]->get_color() ==
+            Board::kEmptyPiece) {
+            if (game_board_.get_board()[Board::kWhiteBackRow][Board::kHFileRookColumn]->get_picture() == "♖") {
+                game_board_.get_board()[Board::kWhiteBackRow][Board::kKingColumn]->SetPosition(Board::kWhiteBackRow,
+                                                                                               Board::kGFileKnightColumn);
+                game_board_.get_board()[Board::kWhiteBackRow][Board::kHFileRookColumn]->SetPosition(
+                        Board::kWhiteBackRow, Board::kFFileBishopColumn);
+                game_board_.SwitchPositions(Board::kWhiteBackRow, Board::kKingColumn, Board::kWhiteBackRow,
+                                            Board::kGFileKnightColumn);
+                game_board_.SwitchPositions(Board::kWhiteBackRow, Board::kHFileRookColumn, Board::kWhiteBackRow,
+                                            Board::kFFileBishopColumn);
             }
         }
     }
 
     void Game::HandleBlackKingSideCastle() {
-        if (game_board_.get_board()[0][5]->get_color() == 2 && game_board_.get_board()[0][6]->get_color() == 2) {
-            if (game_board_.get_board()[0][7]->get_picture() == "♜") {
-                game_board_.get_board()[0][4]->SetPosition(0, 6);
-                game_board_.get_board()[0][7]->SetPosition(0, 5);
-                game_board_.SwitchPositions(0, 4, 0, 6);
-                game_board_.SwitchPositions(0, 7, 0, 5);
+        if (game_board_.get_board()[Board::kBlackBackRow][Board::kFFileBishopColumn]->get_color() ==
+            Board::kEmptyPiece &&
+            game_board_.get_board()[Board::kBlackBackRow][Board::kGFileKnightColumn]->get_color() ==
+            Board::kEmptyPiece) {
+            if (game_board_.get_board()[Board::kBlackBackRow][Board::kHFileRookColumn]->get_picture() == "♜") {
+                game_board_.get_board()[Board::kBlackBackRow][Board::kKingColumn]->SetPosition(Board::kBlackBackRow,
+                                                                                               Board::kGFileKnightColumn);
+                game_board_.get_board()[Board::kBlackBackRow][Board::kHFileRookColumn]->SetPosition(
+                        Board::kBlackBackRow, Board::kFFileBishopColumn);
+                game_board_.SwitchPositions(Board::kBlackBackRow, Board::kKingColumn, Board::kBlackBackRow,
+                                            Board::kGFileKnightColumn);
+                game_board_.SwitchPositions(Board::kBlackBackRow, Board::kHFileRookColumn, Board::kBlackBackRow,
+                                            Board::kFFileBishopColumn);
             }
         }
     }
 
     void Game::HandleWhiteQueenSideCastle() {
-        if (game_board_.get_board()[7][3]->get_color() == 2 && game_board_.get_board()[7][2]->get_color() == 2
-            && game_board_.get_board()[7][1]->get_color() == 2) {
-            if (game_board_.get_board()[7][0]->get_picture() == "♖") {
-                game_board_.get_board()[7][4]->SetPosition(7, 2);
-                game_board_.get_board()[7][0]->SetPosition(7, 3);
-                game_board_.SwitchPositions(7, 4, 7, 2);
-                game_board_.SwitchPositions(7, 0, 7, 3);
+        if (game_board_.get_board()[Board::kWhiteBackRow][Board::kQueenColumn]->get_color() == Board::kEmptyPiece &&
+            game_board_.get_board()[Board::kWhiteBackRow][Board::kCFileBishopColumn]->get_color() == Board::kEmptyPiece
+            && game_board_.get_board()[Board::kWhiteBackRow][Board::kBFileKnightColumn]->get_color() ==
+               Board::kEmptyPiece) {
+            if (game_board_.get_board()[Board::kWhiteBackRow][Board::kAFileRookColumn]->get_picture() == "♖") {
+                game_board_.get_board()[Board::kWhiteBackRow][Board::kKingColumn]->SetPosition(Board::kWhiteBackRow,
+                                                                                               Board::kCFileBishopColumn);
+                game_board_.get_board()[Board::kWhiteBackRow][Board::kAFileRookColumn]->SetPosition(
+                        Board::kWhiteBackRow, Board::kQueenColumn);
+                game_board_.SwitchPositions(Board::kWhiteBackRow, Board::kKingColumn, Board::kWhiteBackRow,
+                                            Board::kCFileBishopColumn);
+                game_board_.SwitchPositions(Board::kWhiteBackRow, Board::kAFileRookColumn, Board::kWhiteBackRow,
+                                            Board::kQueenColumn);
             }
         }
     }
 
     void Game::HandleBlackQueenSideCastle() {
-        if (game_board_.get_board()[0][3]->get_color() == 2 && game_board_.get_board()[0][2]->get_color() == 2
-            && game_board_.get_board()[0][1]->get_color() == 2) {
-            if (game_board_.get_board()[0][0]->get_picture() == "♜") {
-                game_board_.get_board()[0][4]->SetPosition(0, 2);
-                game_board_.get_board()[0][0]->SetPosition(0, 3);
-                game_board_.SwitchPositions(0, 4, 0, 2);
-                game_board_.SwitchPositions(0, 0, 0, 3);
+        if (game_board_.get_board()[Board::kBlackBackRow][Board::kQueenColumn]->get_color() == Board::kEmptyPiece &&
+            game_board_.get_board()[Board::kBlackBackRow][Board::kCFileBishopColumn]->get_color() == Board::kEmptyPiece
+            && game_board_.get_board()[Board::kBlackBackRow][Board::kBFileKnightColumn]->get_color() ==
+               Board::kEmptyPiece) {
+            if (game_board_.get_board()[Board::kBlackBackRow][Board::kAFileRookColumn]->get_picture() == "♜") {
+                game_board_.get_board()[Board::kBlackBackRow][Board::kKingColumn]->SetPosition(Board::kBlackBackRow,
+                                                                                               Board::kCFileBishopColumn);
+                game_board_.get_board()[Board::kBlackBackRow][Board::kAFileRookColumn]->SetPosition(
+                        Board::kBlackBackRow, Board::kQueenColumn);
+                game_board_.SwitchPositions(Board::kBlackBackRow, Board::kKingColumn, Board::kBlackBackRow,
+                                            Board::kCFileBishopColumn);
+                game_board_.SwitchPositions(Board::kBlackBackRow, Board::kAFileRookColumn, Board::kBlackBackRow,
+                                            Board::kQueenColumn);
             }
         }
 
     }
 
     void Game::HandleCastling(int row, int col) {
-        if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" && row == 7 &&
-            col == 6) {
-            if (CheckKingCastleIntersection(7, 0)) {
+        if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" && row == Board::kWhiteBackRow &&
+            col == Board::kGFileKnightColumn) {
+            if (CheckKingCastleIntersection(Board::kWhiteBackRow, Board::kBlackPiece)) {
                 HandleWhiteKingSideCastle();
                 notation_.emplace_back("♔0-0");
             }
-        } else if (game_board_.get_board()[current_x][current_y]->get_picture() == "♚" && row == 0 &&
-                   col == 6) {
-            if (CheckKingCastleIntersection(0, 1)) {
+        } else if (game_board_.get_board()[current_x][current_y]->get_picture() == "♚" && row == Board::kBlackBackRow &&
+                   col == Board::kGFileKnightColumn) {
+            if (CheckKingCastleIntersection(Board::kBlackBackRow, Board::kWhitePiece)) {
                 HandleBlackKingSideCastle();
                 notation_.emplace_back("♚0-0");
             }
-        } else if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" && row == 7 &&
-                   col == 2) {
-            if (CheckQueenCastleIntersection(7, 0)) {
+        } else if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" && row == Board::kWhiteBackRow &&
+                   col == Board::kCFileBishopColumn) {
+            if (CheckQueenCastleIntersection(Board::kWhiteBackRow, Board::kBlackPiece)) {
                 HandleWhiteQueenSideCastle();
                 notation_.emplace_back("♔0-0");
             }
-        } else if (game_board_.get_board()[current_x][current_y]->get_picture() == "♚" && row == 0 &&
-                   col == 2) {
-            if (CheckQueenCastleIntersection(0, 1)) {
+        } else if (game_board_.get_board()[current_x][current_y]->get_picture() == "♚" && row == Board::kBlackBackRow &&
+                   col == Board::kCFileBishopColumn) {
+            if (CheckQueenCastleIntersection(Board::kBlackBackRow, Board::kWhitePiece)) {
                 HandleBlackQueenSideCastle();
                 notation_.emplace_back("♚0-0");
             }
@@ -228,14 +254,16 @@ namespace chess {
         return false;
     }
 
-    bool Game::CheckQueenCastleIntersection(int color, int opposing_color) {
-        for (size_t x = 0; x < 8; ++x) {
-            for (size_t y = 0; y < 8; ++y) {
-                if (game_board_.get_board()[x][y]->get_color() == opposing_color) {
-                    if ((game_board_.get_board()[x][y]->Move(color, 3, game_board_) &&
-                         game_board_.get_board()[x][y]->CheckPossibleMove(color, 3, game_board_)) ||
-                        (game_board_.get_board()[x][y]->Move(color, 2, game_board_) &&
-                         game_board_.get_board()[x][y]->CheckPossibleMove(color, 2, game_board_))) {
+    bool Game::CheckQueenCastleIntersection(int back_row, int opposing_color) {
+        for (size_t row = 0; row < Board::kBoardSize; ++row) {
+            for (size_t col = 0; col < Board::kBoardSize; ++col) {
+                if (game_board_.get_board()[row][col]->get_color() == opposing_color) {
+                    if ((game_board_.get_board()[row][col]->Move(back_row, Board::kQueenColumn, game_board_) &&
+                         game_board_.get_board()[row][col]->CheckPossibleMove(back_row, Board::kQueenColumn,
+                                                                              game_board_)) ||
+                        (game_board_.get_board()[row][col]->Move(back_row, Board::kCFileBishopColumn, game_board_) &&
+                         game_board_.get_board()[row][col]->CheckPossibleMove(back_row, Board::kCFileBishopColumn,
+                                                                              game_board_))) {
                         return false;
                     }
                 }
@@ -245,14 +273,16 @@ namespace chess {
     }
 
 
-    bool Game::CheckKingCastleIntersection(int color, int opposing_color) {
-        for (size_t row = 0; row < 8; ++row) {
-            for (size_t col = 0; col < 8; ++col) {
+    bool Game::CheckKingCastleIntersection(int back_row, int opposing_color) {
+        for (size_t row = 0; row < Board::kBoardSize; ++row) {
+            for (size_t col = 0; col < Board::kBoardSize; ++col) {
                 if (game_board_.get_board()[row][col]->get_color() == opposing_color) {
-                    if ((game_board_.get_board()[row][col]->Move(color, 5, game_board_) &&
-                         game_board_.get_board()[row][col]->CheckPossibleMove(color, 5, game_board_)) ||
-                        (game_board_.get_board()[row][col]->Move(color, 6, game_board_) &&
-                         game_board_.get_board()[row][col]->CheckPossibleMove(color, 6, game_board_))) {
+                    if ((game_board_.get_board()[row][col]->Move(back_row, Board::kFFileBishopColumn, game_board_) &&
+                         game_board_.get_board()[row][col]->CheckPossibleMove(back_row, Board::kFFileBishopColumn,
+                                                                              game_board_)) ||
+                        (game_board_.get_board()[row][col]->Move(back_row, Board::kGFileKnightColumn, game_board_) &&
+                         game_board_.get_board()[row][col]->CheckPossibleMove(back_row, Board::kGFileKnightColumn,
+                                                                              game_board_))) {
                         return false;
                     }
                 }
@@ -264,7 +294,7 @@ namespace chess {
     bool Game::CheckPawnPromotion(int row, int col) {
         if (game_board_.get_board()[row][col]->get_picture() == "♟" ||
             game_board_.get_board()[row][col]->get_picture() == "♙") {
-            if (row == 0 || row == 7) {
+            if (row == Board::kBlackBackRow || row == Board::kWhiteBackRow) {
                 return true;
             }
         }
@@ -275,8 +305,8 @@ namespace chess {
         int king_row;
         int king_col;
 
-        for (size_t row = 0; row < 8; ++row) {
-            for (size_t col = 0; col < 8; ++col) {
+        for (size_t row = 0; row < Board::kBoardSize; ++row) {
+            for (size_t col = 0; col < Board::kBoardSize; ++col) {
                 if (game_board_.get_board()[row][col]->get_picture() == "♔") {
                     king_row = row;
                     king_col = col;
@@ -285,11 +315,11 @@ namespace chess {
             }
         }
 
-        for (size_t row = 0; row < 8; ++row) {
-            for (size_t col = 0; col < 8; ++col) {
-                if (game_board_.get_board()[row][col]->get_color() == 0) {
-                    if(game_board_.get_board()[row][col]->Move(king_row, king_col, game_board_) &&
-                            game_board_.get_board()[row][col]->CheckPossibleMove(king_row, king_col, game_board_)) {
+        for (size_t row = 0; row < Board::kBoardSize; ++row) {
+            for (size_t col = 0; col < Board::kBoardSize; ++col) {
+                if (game_board_.get_board()[row][col]->get_color() == Board::kBlackPiece) {
+                    if (game_board_.get_board()[row][col]->Move(king_row, king_col, game_board_) &&
+                        game_board_.get_board()[row][col]->CheckPossibleMove(king_row, king_col, game_board_)) {
                         return true;
                     }
                 }
@@ -302,8 +332,8 @@ namespace chess {
         int king_row;
         int king_col;
 
-        for (size_t row = 0; row < 8; ++row) {
-            for (size_t col = 0; col < 8; ++col) {
+        for (size_t row = 0; row < Board::kBoardSize; ++row) {
+            for (size_t col = 0; col < Board::kBoardSize; ++col) {
                 if (game_board_.get_board()[row][col]->get_picture() == "♚") {
                     king_row = row;
                     king_col = col;
@@ -312,11 +342,11 @@ namespace chess {
             }
         }
 
-        for (size_t row = 0; row < 8; ++row) {
-            for (size_t col = 0; col < 8; ++col) {
-                if (game_board_.get_board()[row][col]->get_color() == 1) {
-                    if(game_board_.get_board()[row][col]->Move(king_row, king_col, game_board_) &&
-                       game_board_.get_board()[row][col]->CheckPossibleMove(king_row, king_col, game_board_)) {
+        for (size_t row = 0; row < Board::kBoardSize; ++row) {
+            for (size_t col = 0; col < Board::kBoardSize; ++col) {
+                if (game_board_.get_board()[row][col]->get_color() == Board::kWhitePiece) {
+                    if (game_board_.get_board()[row][col]->Move(king_row, king_col, game_board_) &&
+                        game_board_.get_board()[row][col]->CheckPossibleMove(king_row, king_col, game_board_)) {
                         return true;
                     }
                 }

@@ -11,6 +11,28 @@ namespace chess {
      */
     class Board {
     public:
+        static const int kBoardSize = 8;
+
+        static const int kWhiteBackRow = 7;
+        static const int kWhitePawnRow = 1;
+        static const int kBlackBackRow = 0;
+        static const int kBlackPawnRow = 6;
+        static const int kEmptyRowWhite = 5;
+        static const int kEmptyRowBlack = 2;
+
+        static const int kBlackPiece = 0;
+        static const int kWhitePiece = 1;
+        static const int kEmptyPiece = 2;
+
+        static const int kAFileRookColumn = 0;
+        static const int kBFileKnightColumn = 1;
+        static const int kCFileBishopColumn = 2;
+        static const int kQueenColumn = 3;
+        static const int kKingColumn = 4;
+        static const int kFFileBishopColumn = 5;
+        static const int kGFileKnightColumn = 6;
+        static const int kHFileRookColumn = 7;
+
         /**
          * Returns the board.
          * @return the board.
