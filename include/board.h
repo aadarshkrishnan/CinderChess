@@ -43,6 +43,15 @@ namespace chess {
          */
         void Promote(int row, int col);
 
+        /**
+         * Brings back a taken piece on an invalid move.
+         * @param color the color of the piece
+         * @param row of the board it should be on
+         * @param col of the board it should be on
+         * @param image of the piece
+         */
+        void BringBackPiece(int color, int row, int col, std::string image);
+
     private:
         std::vector<std::vector<Piece *>> board_;
     };

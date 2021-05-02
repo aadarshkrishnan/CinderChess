@@ -1,4 +1,3 @@
-#include <queen.h>
 #include "board.h"
 #include "game.h"
 
@@ -20,7 +19,6 @@ namespace chess {
                 } else {
                     ci::gl::color(ci::Color("gray"));
                 }
-
 
                 vec2 pixel_top_left = vec2(100, 100) + vec2(col * 70, row * 70);
                 vec2 pixel_bottom_right = pixel_top_left + vec2(70, 70);
@@ -69,7 +67,7 @@ namespace chess {
                         if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" ||
                             game_board_.get_board()[current_x][current_y]->get_picture() == "♚") {
                             if (current_y - col == 2 || col - current_y == 2) {
-                                if (CheckPreviousKingMove()) {
+                                if (CheckPreviousKingMove() || CheckWhiteKingInCheck() || CheckBlackKingInCheck()) {
                                     current_x = -1;
                                     current_y = -1;
                                     break;
@@ -86,9 +84,34 @@ namespace chess {
                             game_board_.get_board()[current_x][current_y]->CheckPossibleMove(row, col,
                                                                                              game_board_) &&
                             game_board_.get_board()[current_x][current_y]->CheckSameColor(row, col, game_board_)) {
+                            int save_color = game_board_.get_board()[row][col]->get_color();
+                            std::string save_picture = game_board_.get_board()[row][col]->get_picture();
                             game_board_.get_board()[current_x][current_y]->SetPosition(row, col);
                             game_board_.get_board()[row][col]->SetPosition(current_x, current_y);
                             game_board_.SwitchPositions(current_x, current_y, row, col);
+
+                            if (notation_.size() % 2 == 0) {
+                                if (CheckWhiteKingInCheck()) {
+                                    game_board_.get_board()[row][col]->SetPosition(current_x, current_y);
+                                    game_board_.get_board()[current_x][current_y]->SetPosition(row, col);
+                                    game_board_.SwitchPositions(row, col, current_x, current_y);
+                                    game_board_.BringBackPiece(save_color, row, col, save_picture);
+                                    current_x = -1;
+                                    current_y = -1;
+                                    break;
+                                }
+                            } else {
+
+                                if (CheckBlackKingInCheck()) {
+                                    game_board_.get_board()[row][col]->SetPosition(current_x, current_y);
+                                    game_board_.get_board()[current_x][current_y]->SetPosition(row, col);
+                                    game_board_.SwitchPositions(row, col, current_x, current_y);
+                                    game_board_.BringBackPiece(save_color, row, col, save_picture);
+                                    current_x = -1;
+                                    current_y = -1;
+                                    break;
+                                }
+                            }
 
                             if (CheckPawnPromotion(row,col)) {
                                 game_board_.Promote(row, col);
@@ -96,9 +119,11 @@ namespace chess {
 
                             notation_.push_back(game_board_.get_board()[row][col]->get_picture() + std::to_string(row) +
                                                 std::to_string(col));
+
                             for (const std::string &x: notation_) {
                                 std::cout << x << " ";
                             }
+
                         }
                         current_x = -1;
                         current_y = -1;
@@ -110,7 +135,6 @@ namespace chess {
     }
 
     void Game::HandleWhiteKingSideCastle() {
-
         if (game_board_.get_board()[7][5]->get_color() == 2 && game_board_.get_board()[7][6]->get_color() == 2) {
             if (game_board_.get_board()[7][7]->get_picture() == "♖") {
                 game_board_.get_board()[7][4]->SetPosition(7, 6);
@@ -211,9 +235,7 @@ namespace chess {
                     if ((game_board_.get_board()[x][y]->Move(color, 3, game_board_) &&
                          game_board_.get_board()[x][y]->CheckPossibleMove(color, 3, game_board_)) ||
                         (game_board_.get_board()[x][y]->Move(color, 2, game_board_) &&
-                         game_board_.get_board()[x][y]->CheckPossibleMove(color, 2, game_board_)) ||
-                        (game_board_.get_board()[x][y]->Move(color, 1, game_board_) &&
-                         game_board_.get_board()[x][y]->CheckPossibleMove(color, 1, game_board_))) {
+                         game_board_.get_board()[x][y]->CheckPossibleMove(color, 2, game_board_))) {
                         return false;
                     }
                 }
@@ -224,13 +246,13 @@ namespace chess {
 
 
     bool Game::CheckKingCastleIntersection(int color, int opposing_color) {
-        for (size_t x = 0; x < 8; ++x) {
-            for (size_t y = 0; y < 8; ++y) {
-                if (game_board_.get_board()[x][y]->get_color() == opposing_color) {
-                    if ((game_board_.get_board()[x][y]->Move(color, 5, game_board_) &&
-                         game_board_.get_board()[x][y]->CheckPossibleMove(color, 5, game_board_)) ||
-                        (game_board_.get_board()[x][y]->Move(color, 6, game_board_) &&
-                         game_board_.get_board()[x][y]->CheckPossibleMove(color, 6, game_board_))) {
+        for (size_t row = 0; row < 8; ++row) {
+            for (size_t col = 0; col < 8; ++col) {
+                if (game_board_.get_board()[row][col]->get_color() == opposing_color) {
+                    if ((game_board_.get_board()[row][col]->Move(color, 5, game_board_) &&
+                         game_board_.get_board()[row][col]->CheckPossibleMove(color, 5, game_board_)) ||
+                        (game_board_.get_board()[row][col]->Move(color, 6, game_board_) &&
+                         game_board_.get_board()[row][col]->CheckPossibleMove(color, 6, game_board_))) {
                         return false;
                     }
                 }
@@ -244,6 +266,60 @@ namespace chess {
             game_board_.get_board()[row][col]->get_picture() == "♙") {
             if (row == 0 || row == 7) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    bool Game::CheckWhiteKingInCheck() {
+        int king_row;
+        int king_col;
+
+        for (size_t row = 0; row < 8; ++row) {
+            for (size_t col = 0; col < 8; ++col) {
+                if (game_board_.get_board()[row][col]->get_picture() == "♔") {
+                    king_row = row;
+                    king_col = col;
+                    break;
+                }
+            }
+        }
+
+        for (size_t row = 0; row < 8; ++row) {
+            for (size_t col = 0; col < 8; ++col) {
+                if (game_board_.get_board()[row][col]->get_color() == 0) {
+                    if(game_board_.get_board()[row][col]->Move(king_row, king_col, game_board_) &&
+                            game_board_.get_board()[row][col]->CheckPossibleMove(king_row, king_col, game_board_)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    bool Game::CheckBlackKingInCheck() {
+        int king_row;
+        int king_col;
+
+        for (size_t row = 0; row < 8; ++row) {
+            for (size_t col = 0; col < 8; ++col) {
+                if (game_board_.get_board()[row][col]->get_picture() == "♚") {
+                    king_row = row;
+                    king_col = col;
+                    break;
+                }
+            }
+        }
+
+        for (size_t row = 0; row < 8; ++row) {
+            for (size_t col = 0; col < 8; ++col) {
+                if (game_board_.get_board()[row][col]->get_color() == 1) {
+                    if(game_board_.get_board()[row][col]->Move(king_row, king_col, game_board_) &&
+                       game_board_.get_board()[row][col]->CheckPossibleMove(king_row, king_col, game_board_)) {
+                        return true;
+                    }
+                }
             }
         }
         return false;

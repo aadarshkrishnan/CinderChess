@@ -84,4 +84,24 @@ namespace chess {
             board_[row][col] = new Queen(1, row, col, "♕");
         }
     }
+
+    void Board::BringBackPiece(int color, int row, int col, std::string image) {
+        delete board_[row][col];
+        if (image == "") {
+            board_[row][col] = new Space(color, row, col, image);
+        } else if (image == "♛" || image == "♕") {
+            board_[row][col] = new Queen(color, row, col, image);
+        } else if (image == "♟︎" || image == "♙") {
+            board_[row][col] = new Pawn(color, row, col, image);
+        } else if (image == "♜" || image == "♖") {
+            board_[row][col] = new Rook(color, row, col, image);
+        } else if (image == "♞" || image == "♘") {
+            board_[row][col] = new Knight(color, row, col, image);
+        } else if (image == "♝" || image == "♗") {
+            board_[row][col] = new Bishop(color, row, col, image);
+        } else if (image == "♚" || image == "♔") {
+            board_[row][col] = new King(color, row, col, image);
+        }
+
+    }
 }

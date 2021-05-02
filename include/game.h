@@ -86,6 +86,18 @@ namespace chess {
          */
         bool CheckPawnPromotion(int row, int col);
 
+        /**
+         * Checks if the white king is in check
+         * @return true if in check
+         */
+        bool CheckWhiteKingInCheck();
+
+        /**
+         * Checks if the black king is in check
+         * @return true if in check
+         */
+        bool CheckBlackKingInCheck();
+
     private:
         Board game_board_;
         std::vector<std::string> notation_;
