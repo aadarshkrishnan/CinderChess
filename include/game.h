@@ -97,7 +97,6 @@ namespace chess {
          * @return true if in check
          */
         bool CheckBlackKingInCheck();
-
     private:
 
         const int kWindowSize = 750;
