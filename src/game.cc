@@ -6,8 +6,8 @@ namespace chess {
     using glm::vec2;
 
     Game::Game() {
-        ci::app::setWindowSize(kWindowSize, kWindowSize);
         game_board_.SetStartingPosition();
+        ci::app::setWindowSize(kWindowSize, kWindowSize);
     }
 
     void Game::draw() {
@@ -128,7 +128,6 @@ namespace chess {
                         current_x = -1;
                         current_y = -1;
                     }
-                    std::cout << std::endl;
                 }
             }
         }
@@ -354,5 +353,6 @@ namespace chess {
         }
         return false;
     }
+
 }
 

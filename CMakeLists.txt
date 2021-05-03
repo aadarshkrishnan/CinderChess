@@ -60,7 +60,8 @@ list(APPEND SOURCE_FILES src/bishop.cc
         src/rook.cc
         src/space.cc)
 
-list(APPEND TEST_FILES tests/pawn_movements_tests.cc)
+list(APPEND TEST_FILES tests/pawn_movements_tests.cc
+        tests/test_main.cc)
 
 
 ci_make_app(
