@@ -61,6 +61,7 @@ list(APPEND SOURCE_FILES src/bishop.cc
         src/space.cc)
 
 list(APPEND TEST_FILES tests/pawn_movements_tests.cc
+        tests/bishop_movements_tests.cc
         tests/test_main.cc)
 
 

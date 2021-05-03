@@ -6,11 +6,12 @@ namespace chess {
     using glm::vec2;
 
     Game::Game() {
-        game_board_.SetStartingPosition();
         ci::app::setWindowSize(kWindowSize, kWindowSize);
+        game_board_.SetStartingPosition();
     }
 
     void Game::draw() {
+        //drawing the board
         for (size_t row = 0; row < Board::kBoardSize; ++row) {
             for (size_t col = 0; col < Board::kBoardSize; ++col) {
 
@@ -68,6 +69,7 @@ namespace chess {
                         current_y = col;
                     } else {
 
+                        //king and castling
                         if (game_board_.get_board()[current_x][current_y]->get_picture() == "♔" ||
                             game_board_.get_board()[current_x][current_y]->get_picture() == "♚") {
                             if (current_y - col == 2 || col - current_y == 2) {
@@ -84,6 +86,7 @@ namespace chess {
                             }
                         }
 
+                        //regular movements
                         if (game_board_.get_board()[current_x][current_y]->Move(row, col, game_board_) &&
                             game_board_.get_board()[current_x][current_y]->CheckPossibleMove(row, col,
                                                                                              game_board_) &&
@@ -94,6 +97,7 @@ namespace chess {
                             game_board_.get_board()[row][col]->SetPosition(current_x, current_y);
                             game_board_.SwitchPositions(current_x, current_y, row, col);
 
+                            //undoing a move if the same color king is still in check
                             if (notation_.size() % 2 == 0) {
                                 if (CheckWhiteKingInCheck()) {
                                     game_board_.get_board()[row][col]->SetPosition(current_x, current_y);
@@ -117,14 +121,17 @@ namespace chess {
                                 }
                             }
 
+                            //pawn promotion
                             if (CheckPawnPromotion(row, col)) {
                                 game_board_.Promote(row, col);
                             }
 
+                            //adding to notation
                             notation_.push_back(game_board_.get_board()[row][col]->get_picture() + std::to_string(row) +
                                                 std::to_string(col));
 
                         }
+                        //restarting click moves
                         current_x = -1;
                         current_y = -1;
                     }

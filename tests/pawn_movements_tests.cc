@@ -1,11 +1,7 @@
-
 #include <catch2/catch.hpp>
 
-#include <game.h>
 #include <board.h>
-#include <piece.h>
 
-using chess::Game;
 using chess::Board;
 using chess::Piece;
 
@@ -267,7 +263,7 @@ TEST_CASE("Promotion") {
 }
 
 
-TEST_CASE("Invalid Moves") {
+TEST_CASE("Invalid Pawn Moves") {
     Board board = Board();
     board.SetStartingPosition();
 
@@ -334,4 +330,13 @@ TEST_CASE("Invalid Moves") {
                  board.get_board()[4][0]->CheckSameColor(3, 1, board)) == false);
     }
 
+    SECTION("Move through a piece on first move") {
+        //putting knight in front of pawn
+        board.get_board()[7][1]->SetPosition(5, 2);
+        board.get_board()[5][2]->SetPosition(7, 1);
+        board.SwitchPositions(7, 1, 5, 2);
+        REQUIRE((board.get_board()[6][2]->Move(4, 2, board) &&
+                 board.get_board()[6][2]->CheckPossibleMove(4, 2, board) &&
+                 board.get_board()[6][2]->CheckSameColor(4, 2, board)) == false);
+    }
 }
