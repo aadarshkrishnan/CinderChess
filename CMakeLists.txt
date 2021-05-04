@@ -63,6 +63,8 @@ list(APPEND SOURCE_FILES src/bishop.cc
 list(APPEND TEST_FILES tests/pawn_movements_tests.cc
         tests/bishop_movements_tests.cc
         tests/knight_movements_tests.cc
+        tests/king_movements_tests.cc
+        tests/queen_movements_tests.cc
         tests/test_main.cc)
 
 
