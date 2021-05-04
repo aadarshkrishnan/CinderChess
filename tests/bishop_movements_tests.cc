@@ -28,6 +28,7 @@ TEST_CASE("Valid Bishop Moves") {
     board.SwitchPositions(1, 1, 2, 1);
 
     SECTION("Valid Diagonal Movement") {
+
         SECTION("Up and Left") {
             REQUIRE((board.get_board()[7][2]->Move(5, 0, board) &&
                      board.get_board()[7][2]->CheckPossibleMove(5, 0, board) &&

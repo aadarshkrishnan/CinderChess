@@ -91,7 +91,9 @@ TEST_CASE("Invalid King Moves") {
         REQUIRE((board.get_board()[4][4]->Move(6, 5, board) &&
                  board.get_board()[4][4]->CheckPossibleMove(6, 5, board) &&
                  board.get_board()[4][4]->CheckSameColor(6, 5, board)) == false);
-    }SECTION("Two space move") {
+    }
+
+    SECTION("Two space move") {
         REQUIRE((board.get_board()[4][4]->Move(6, 4, board) &&
                  board.get_board()[4][4]->CheckPossibleMove(6, 4, board) &&
                  board.get_board()[4][4]->CheckSameColor(6, 4, board)) == false);

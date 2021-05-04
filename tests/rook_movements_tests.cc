@@ -16,6 +16,7 @@ TEST_CASE("Valid Rook Moves") {
     board.SwitchPositions(7, 7, 4, 4);
 
     SECTION("Horizontal movement") {
+
         SECTION("Left Movement") {
             REQUIRE((board.get_board()[4][4]->Move(4, 0, board) &&
                      board.get_board()[4][4]->CheckPossibleMove(4, 0, board) &&
@@ -30,6 +31,7 @@ TEST_CASE("Valid Rook Moves") {
     }
 
     SECTION("Vertical movement") {
+
         SECTION("Up Movement") {
             REQUIRE((board.get_board()[4][4]->Move(2, 4, board) &&
                      board.get_board()[4][4]->CheckPossibleMove(2, 4, board) &&
@@ -60,6 +62,7 @@ TEST_CASE("Invalid Rook Movements") {
     board.SwitchPositions(7, 7, 4, 4);
 
     SECTION("Not Straight Movement") {
+
         SECTION("Invalid Diagonal Movement") {
             REQUIRE((board.get_board()[4][4]->Move(5, 5, board) &&
                      board.get_board()[4][4]->CheckPossibleMove(5, 5, board) &&
@@ -101,5 +104,11 @@ TEST_CASE("Invalid Rook Movements") {
         REQUIRE((board.get_board()[7][0]->Move(7, 7, board) &&
                  board.get_board()[7][0]->CheckPossibleMove(7, 7, board) &&
                  board.get_board()[7][0]->CheckSameColor(7, 7, board)) == false);
+    }
+
+    SECTION("Same color piece capture") {
+        REQUIRE((board.get_board()[7][0]->Move(6, 0, board) &&
+                 board.get_board()[7][0]->CheckPossibleMove(6, 0, board) &&
+                 board.get_board()[7][0]->CheckSameColor(6, 0, board)) == false);
     }
 }

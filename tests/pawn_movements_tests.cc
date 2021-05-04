@@ -176,6 +176,7 @@ TEST_CASE("Captures") {
     board.SwitchPositions(1, 5, 3, 5);
 
     SECTION("White") {
+
         SECTION("Left Diagonal") {
             REQUIRE((board.get_board()[4][4]->Move(3, 3, board) &&
                     board.get_board()[4][4]->CheckPossibleMove(3, 3, board) &&
@@ -190,6 +191,7 @@ TEST_CASE("Captures") {
     }
 
     SECTION("Black") {
+
         SECTION("Left Diagonal") {
             REQUIRE((board.get_board()[3][3]->Move(4, 4, board) &&
                      board.get_board()[3][3]->CheckPossibleMove(4, 4, board) &&
@@ -291,6 +293,7 @@ TEST_CASE("Invalid Pawn Moves") {
     }
 
     SECTION("More than one square after first move") {
+
         SECTION("Vertical") {
             REQUIRE((board.get_board()[4][0]->Move(6, 0, board) &&
                      board.get_board()[4][0]->CheckPossibleMove(6, 0, board) &&

@@ -11,6 +11,7 @@ TEST_CASE("Valid Knight Moves") {
     board.SetStartingPosition();
 
     SECTION("Valid Knight moves") {
+
         SECTION("Two vertical one horizontal") {
             REQUIRE((board.get_board()[7][1]->Move(5, 2, board) &&
                      board.get_board()[7][1]->CheckPossibleMove(5, 2, board) &&
@@ -28,6 +29,7 @@ TEST_CASE("Valid Knight Moves") {
                      board.get_board()[0][6]->CheckPossibleMove(2, 5, board) &&
                      board.get_board()[0][6]->CheckSameColor(2, 5, board)) == true);
         }
+
         SECTION("Two horizontal one vertical") {
             //moving pawns to clear space for knight moves
             board.get_board()[6][3]->SetPosition(5, 3);
