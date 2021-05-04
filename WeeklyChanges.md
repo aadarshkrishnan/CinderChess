@@ -15,3 +15,8 @@ Week 2 Changes:
 - Added images for each piece
 - Allowed user interaction with pieces
 - Essentially created working game, but still lacking a move on your turn element, castling, and en passant
+
+Week 3 Changes:
+
+- Added all edge cases and turn based game that does not allow illegal moves
+- Added testing for all piece
