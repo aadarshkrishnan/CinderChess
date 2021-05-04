@@ -5,7 +5,7 @@
 using chess::Board;
 using chess::Piece;
 
-TEST_CASE("Valid Moves") {
+TEST_CASE("Valid Bishop Moves") {
 
     Board board = Board();
     board.SetStartingPosition();
