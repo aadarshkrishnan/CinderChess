@@ -5,8 +5,9 @@ A classic chess game that can be played turn by turn using C++.
 
 ## Dependencies
 
-- [CLion]
-- [cinder]
+- Environment: CLion
+- Cinder
+- Cmake
 
 ## CLion
 
@@ -28,6 +29,19 @@ Open the ~/Cinder folder in CLion and click the green build button. This will bu
 
 - If you're using Ubuntu, you can follow the instructions: https://libcinder.org/docs/guides/cmake/cmake.html#command-line-options
 
+## Cmake 
+### Ubuntu
+
+```console
+$ sudo apt-get install gcc cmake libsdl2-dev
+```
+
+### MacOS
+
+```console
+$ brew install gcc cmake sdl2
+```
+
 ## Controls
 
 ### Game
@@ -36,7 +50,11 @@ Open the ~/Cinder folder in CLion and click the green build button. This will bu
 | `Mouse Click`               | Moves piece from original click to new click location if move is valid.             |
 
 
-### Rules
+## Chess Rules
 
 https://www.chess.com/learn-how-to-play-chess
 
+
+## Created By
+
+Aadarsh Krishnan
