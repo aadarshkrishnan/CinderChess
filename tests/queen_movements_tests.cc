@@ -88,6 +88,7 @@ TEST_CASE("Valid Queen Moves") {
 }
 
 TEST_CASE("Invalid Queen Moves") {
+
     Board board = Board();
     board.SetStartingPosition();
 
@@ -116,5 +117,10 @@ TEST_CASE("Invalid Queen Moves") {
                  board.get_board()[4][4]->CheckSameColor(3, 6, board)) == false);
     }
 
+    SECTION("Same color capture") {
+        REQUIRE((board.get_board()[4][4]->Move(6, 4, board) &&
+                 board.get_board()[4][4]->CheckPossibleMove(6, 4, board) &&
+                 board.get_board()[4][4]->CheckSameColor(6, 4, board)) == false);
+    }
 }
 

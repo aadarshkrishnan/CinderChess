@@ -75,6 +75,12 @@ TEST_CASE("Valid King Moves") {
                  board.get_board()[4][4]->CheckPossibleMove(3, 3, board) &&
                  board.get_board()[4][4]->CheckSameColor(3, 3, board)) == true);
     }
+
+    SECTION("Castling") {
+        /* Can not be tested because it requires features and methods from Game class.
+         * Otherwise there would be sections on king and queen side castling from black and white.
+         */
+    }
 }
 
 TEST_CASE("Invalid King Moves") {

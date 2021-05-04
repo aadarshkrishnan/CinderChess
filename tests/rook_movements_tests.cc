@@ -53,6 +53,7 @@ TEST_CASE("Valid Rook Moves") {
 }
 
 TEST_CASE("Invalid Rook Movements") {
+
     Board board = Board();
     board.SetStartingPosition();
 

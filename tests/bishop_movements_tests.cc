@@ -67,6 +67,7 @@ TEST_CASE("Valid Bishop Moves") {
 }
 
 TEST_CASE("Invalid Bishop Moves") {
+
     Board board = Board();
     board.SetStartingPosition();
 
